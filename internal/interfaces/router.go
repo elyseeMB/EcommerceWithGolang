@@ -24,5 +24,6 @@ func RegisterRoutes(g *gin.RouterGroup, cfg database.AppConfig) {
 
 	taxonomyRouterGroup := g.Group("/taxonomy")
 
+	taxonomyRouterGroup.GET("/list", taxonomyHandler.List)
 	taxonomyRouterGroup.GET("/", taxonomyHandler.Create)
 }

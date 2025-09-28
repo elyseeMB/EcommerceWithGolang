@@ -18,6 +18,19 @@ func NewTaxonomyHandler(app application.TaxonomyAppInterface) *TaxonomyHandler {
 	}
 }
 
+func (h *TaxonomyHandler) List(c *gin.Context) {
+	taxonomies, err := h.taxonomyApp.List(context.TODO())
+	if err != nil {
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": taxonomies,
+	})
+
+}
+
 func (h *TaxonomyHandler) Create(c *gin.Context) {
 
 	h.taxonomyApp.Create(context.TODO(), &entity.Taxonomy{

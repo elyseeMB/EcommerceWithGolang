@@ -12,14 +12,19 @@ type taxonomyApp struct {
 	taxonomyRepo repository.TaxonomyRespositoryI
 }
 
-type TaxonomyAppInterface interface {
-	Create(context.Context, *entity.Taxonomy) error
-}
-
 func NewTaxonomyApp(r repository.TaxonomyRespositoryI) *taxonomyApp {
 	return &taxonomyApp{
 		taxonomyRepo: r,
 	}
+}
+
+type TaxonomyAppInterface interface {
+	List(context.Context) ([]*entity.Taxonomy, error)
+	Create(context.Context, *entity.Taxonomy) error
+}
+
+func (app *taxonomyApp) List(ctx context.Context) ([]*entity.Taxonomy, error) {
+	return app.taxonomyRepo.List(ctx)
 }
 
 func (app *taxonomyApp) Create(ctx context.Context, taxonomy *entity.Taxonomy) error {

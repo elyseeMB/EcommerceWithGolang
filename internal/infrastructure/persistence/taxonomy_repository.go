@@ -33,13 +33,38 @@ func NewTaxonomyRepository(ctx context.Context, cfg *database.AppConfig) *Taxono
 	}
 }
 
+func (r *TaxonomyRespository) List(ctx context.Context) ([]*entity.Taxonomy, error) {
+	taxonomies := []*entity.Taxonomy{}
+
+	query := fmt.Sprintf("SELECT * FROM %s", r.tableName)
+
+	rows, err := r.client.QueryContext(ctx, query)
+	if err != nil {
+		return nil, fmt.Errorf("error getting columns: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		t := &entity.Taxonomy{}
+		if err := rows.Scan(&t.Id, &t.Name); err != nil {
+			return nil, fmt.Errorf("error scanning row %w", err)
+		}
+		taxonomies = append(taxonomies, t)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows error : %w", err)
+	}
+
+	return taxonomies, nil
+
+}
+
 func (r *TaxonomyRespository) Create(ctx context.Context, taxonomy *entity.Taxonomy) error {
 
 	taxonomy.Id = utils.GenerateID()
 
 	query := fmt.Sprintf("INSERT INTO %s (id, name) VALUES (?, ?)", r.tableName)
-
-	fmt.Printf("value :%v", r.tableName)
 
 	_, err := r.client.ExecContext(ctx, query, taxonomy.Id, taxonomy.Name)
 
