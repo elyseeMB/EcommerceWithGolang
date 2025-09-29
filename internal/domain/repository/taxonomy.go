@@ -8,5 +8,5 @@ import (
 type TaxonomyRespositoryI interface {
 	List(context.Context) ([]*entity.Taxonomy, error)
 	Create(context.Context, *entity.Taxonomy) error
-	// GetById(id int) (*entity.Taxonomy, error)
+	GetById(context.Context, int) (*entity.Taxonomy, error)
 }

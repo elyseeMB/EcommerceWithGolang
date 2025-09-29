@@ -4,6 +4,7 @@ import (
 	"EcommerceWithGolang/internal/application"
 	"EcommerceWithGolang/internal/domain/entity"
 	"context"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,9 +34,39 @@ func (h *TaxonomyHandler) List(c *gin.Context) {
 
 func (h *TaxonomyHandler) Create(c *gin.Context) {
 
-	h.taxonomyApp.Create(context.TODO(), &entity.Taxonomy{
+	if err := h.taxonomyApp.Create(context.TODO(), &entity.Taxonomy{
 		Name: "taxonomy_1",
-	})
+	}); err != nil {
+		panic(err)
+	}
 
 	c.JSON(200, gin.H{"message": "taxonomy created"})
+}
+
+func (h *TaxonomyHandler) GetById(c *gin.Context) {
+
+	paramId := c.Param("id")
+
+	if paramId == "" {
+		c.JSON(400, gin.H{"message": "Category Id is required"})
+		return
+	}
+
+	id, err := strconv.Atoi(paramId)
+	if err != nil {
+		c.JSON(400, gin.H{"message": "Invalid ID formt"})
+		return
+	}
+
+	taxonomy, err := h.taxonomyApp.GetById(context.TODO(), id)
+
+	if err != nil {
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": taxonomy,
+	})
+
 }

@@ -73,5 +73,23 @@ func (r *TaxonomyRespository) Create(ctx context.Context, taxonomy *entity.Taxon
 	}
 
 	return nil
+}
+
+func (r *TaxonomyRespository) GetById(ctx context.Context, id int) (*entity.Taxonomy, error) {
+
+	query := fmt.Sprintf("SELECT * FROM %s WHERE id = ?", r.tableName)
+
+	taxonomy := &entity.Taxonomy{}
+
+	rows := r.client.QueryRowContext(ctx, query, id)
+
+	err := rows.Scan(&taxonomy.Id, &taxonomy.Name)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("Error %w", err)
+	}
+	return taxonomy, nil
 
 }
