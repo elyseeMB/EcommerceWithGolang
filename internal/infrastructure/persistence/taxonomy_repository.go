@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"EcommerceWithGolang/internal/domain/entity"
+	"EcommerceWithGolang/internal/domain/repository"
 	"EcommerceWithGolang/internal/infrastructure/database"
 	"EcommerceWithGolang/internal/infrastructure/utils"
 	"context"
@@ -10,7 +11,7 @@ import (
 )
 
 type TaxonomyRespository struct {
-	client    *sql.DB
+	client    repository.DBExecutor
 	tableName string
 }
 

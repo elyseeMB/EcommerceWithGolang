@@ -18,13 +18,20 @@ func RegisterRoutes(g *gin.RouterGroup, cfg database.AppConfig) {
 
 	// Application
 	taxonomyApp := application.NewTaxonomyApp(repositories.Taxonomy)
+	itemApp := application.NewItemApp(repositories.Item)
 
 	// Handlers
 	taxonomyHandler := api.NewTaxonomyHandler(taxonomyApp)
+	itemHandler := api.NewItemHandler(itemApp)
 
+	// TAxonomy routes
 	taxonomyRouterGroup := g.Group("/taxonomy")
-
 	taxonomyRouterGroup.GET("/list", taxonomyHandler.List)
 	taxonomyRouterGroup.GET("/", taxonomyHandler.Create)
 	taxonomyRouterGroup.GET("/:id", taxonomyHandler.GetById)
+
+	// Items
+	itemRouterGroup := g.Group("/item")
+	itemRouterGroup.GET("/list", itemHandler.ListCardId)
+
 }
