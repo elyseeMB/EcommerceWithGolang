@@ -24,7 +24,7 @@ func RegisterRoutes(g *gin.RouterGroup, cfg database.AppConfig) {
 	taxonomyHandler := api.NewTaxonomyHandler(taxonomyApp)
 	itemHandler := api.NewItemHandler(itemApp)
 
-	// TAxonomy routes
+	// Taxonomy routes
 	taxonomyRouterGroup := g.Group("/taxonomy")
 	taxonomyRouterGroup.GET("/list", taxonomyHandler.List)
 	taxonomyRouterGroup.GET("/", taxonomyHandler.Create)
@@ -32,6 +32,8 @@ func RegisterRoutes(g *gin.RouterGroup, cfg database.AppConfig) {
 
 	// Items
 	itemRouterGroup := g.Group("/item")
-	itemRouterGroup.GET("/list", itemHandler.ListCardId)
+	itemRouterGroup.GET("/list", itemHandler.Create)
+
+	// Promotion routes
 
 }

@@ -22,7 +22,12 @@ func NewItemRepository(ctx context.Context, cfg *database.AppConfig) *ItemRespos
 
 	query := `CREATE TABLE IF NOT EXISTS items (
 		id TEXT PRIMARY KEY,
-		name TEXT NOT NULL
+		taxonomy_id TEXT,
+		seller_id TEXT,
+		card_id TEXT,
+		price TEXT,
+		quantity TEXT,
+		item_type TEXT
 	)`
 
 	_, err := db.Exec(query)
@@ -32,7 +37,7 @@ func NewItemRepository(ctx context.Context, cfg *database.AppConfig) *ItemRespos
 
 	return &ItemRespository{
 		client:    db,
-		tableName: "taxonomies",
+		tableName: "items",
 	}
 }
 
@@ -40,7 +45,7 @@ func (r *ItemRespository) Create(ctx context.Context, item *entity.Item) error {
 
 	item.Id = utils.GenerateID()
 
-	query := fmt.Sprintf("INSERT INTO %s (id, taxonomy_id, seller_id, card_id, price, quantiry, item_type) VALUES (?, ?, ?, ?, ?, ?, ?)", r.tableName)
+	query := fmt.Sprintf("INSERT INTO %s (id, taxonomy_id, seller_id, card_id, price, quantity, item_type) VALUES (?, ?, ?, ?, ?, ?, ?)", r.tableName)
 
 	_, err := r.client.ExecContext(ctx, query, item.Id, item.Taxonomy, item.CardID, item.SellerID, item.Price, item.ItemType, item.Quantity)
 

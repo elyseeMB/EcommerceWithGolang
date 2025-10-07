@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: "postgres:latest"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./compose/postgres:/docker-entrypoint-initdb.d:ro"
+      - "postgres-data-ecommerce_with_golang:/var/lib/postgresql/data:rw"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+
+
+volumes: 
+  postgres-data-ecommerce_with_golang:
+
+      
